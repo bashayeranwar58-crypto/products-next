@@ -1,29 +1,25 @@
 'use client';
 
-import { useTransition } from 'react';
-import { createProductAction } from '@/app/actions';
+import { useState } from 'react';
+import { ProductForm } from './ProductForm';
+
 
 export function AddProductButton() {
-    const [isPending, startTransition] = useTransition();
-
-    const handleAdd = () => {
-        startTransition(async () => {
-            const newProduct = {
-                title: 'New Test Product',
-                description: 'This is a test product created via Server Action',
-                price: 99.99,
-                category: 'test',
-                brand: 'TestBrand',
-                thumbnail: 'https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png',
-            };
-            await createProductAction(newProduct);
-            alert('Product added (simulated, DummyJSON does not save it permanently)');
-        });
-    };
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <button onClick={handleAdd} disabled={isPending} className="btn btn-primary shadow-md">
-            {isPending ? 'Adding...' : '+ Add Product'}
-        </button>
+        <>
+            <button
+                onClick={() => setIsOpen(true)}
+                className="hover:text-blue-600 transition-colors"
+                title="Добавить товар"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+            </button>
+
+            {isOpen && <ProductForm onClose={() => setIsOpen(false)} />}
+        </>
     );
 }
